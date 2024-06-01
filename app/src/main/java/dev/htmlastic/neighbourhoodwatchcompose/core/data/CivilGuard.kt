@@ -1,4 +1,4 @@
-package dev.htmlastic.neighbourhoodwatchcompose.data.core
+package dev.htmlastic.neighbourhoodwatchcompose.core.data
 
 import dev.htmlastic.neighbourhoodwatchcompose.patrols.data.Patrol
 import io.realm.kotlin.types.RealmObject
@@ -9,5 +9,6 @@ class CivilGuard: RealmObject {
     @PrimaryKey
     var _id: ObjectId = ObjectId()
     var name: String = ""
+    var phoneNumber: String = ""
     var activePatrols: List<Patrol> = emptyList()
 }

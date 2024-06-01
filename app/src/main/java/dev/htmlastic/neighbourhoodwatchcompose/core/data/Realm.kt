@@ -1,4 +1,4 @@
-package dev.htmlastic.neighbourhoodwatchcompose.data.core
+package dev.htmlastic.neighbourhoodwatchcompose.core.data
 
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
