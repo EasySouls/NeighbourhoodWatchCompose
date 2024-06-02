@@ -30,12 +30,7 @@ fun ActivePatrol(
     patrol: Patrol,
     modifier: Modifier = Modifier
 ) {
-    val patrolStarted: LocalDateTime = DateTimeUtils.fromEpochMillis(patrol.startedAt.epochSeconds)
-    // TODO: Move the formatting to the domain layer
-    val patrolStartedHour = if (patrolStarted.hour < 10) "0${patrolStarted.hour}" else patrolStarted.hour
-    val patrolStartedMinute = if (patrolStarted.minute < 10) "0${patrolStarted.minute}" else patrolStarted.minute
-    val patrolStartedSecond = if (patrolStarted.second < 10) "0${patrolStarted.second}" else patrolStarted.second
-    val patrolStartedInText = "${patrolStartedHour}:${patrolStartedMinute}.${patrolStartedSecond}"
+    val patrolStartedInText = DateTimeUtils.toFormattedText(patrol.startedAt.epochSeconds)
 
     Column(
         modifier = modifier

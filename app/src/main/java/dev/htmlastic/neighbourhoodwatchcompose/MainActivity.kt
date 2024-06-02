@@ -20,9 +20,9 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(
                     navController = navController,
-                    startDestination = Routes.PatrolsScreen
+                    startDestination = Route.PatrolsScreen
                 ) {
-                    composable<Routes.PatrolsScreen> {
+                    composable<Route.PatrolsScreen> {
                         PatrolsScreen(
                             navController = navController
                         )

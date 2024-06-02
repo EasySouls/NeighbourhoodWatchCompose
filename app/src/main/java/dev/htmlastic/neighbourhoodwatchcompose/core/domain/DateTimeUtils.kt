@@ -23,6 +23,14 @@ object DateTimeUtils {
         return Instant.fromEpochMilliseconds(epochMillis).toLocalDateTime(TimeZone.currentSystemDefault())
     }
 
+    fun toFormattedText(epochMillis: Long): String {
+        val inLocalDateTime = fromEpochMillis(epochMillis)
+        val hours = if (inLocalDateTime.hour < 10) "0${inLocalDateTime.hour}" else inLocalDateTime.hour
+        val minutes = if (inLocalDateTime.minute < 10) "0${inLocalDateTime.minute}" else inLocalDateTime.minute
+        val seconds = if (inLocalDateTime.second < 10) "0${inLocalDateTime.second}" else inLocalDateTime.second
+        return "${hours}:${minutes}.${seconds}"
+    }
+
     fun format(dateTime: LocalDateTime): String {
         return LocalDateTime.Formats.ISO.format(dateTime)
     }
