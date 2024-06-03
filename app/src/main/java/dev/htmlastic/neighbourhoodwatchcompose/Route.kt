@@ -2,6 +2,7 @@ package dev.htmlastic.neighbourhoodwatchcompose
 
 import kotlinx.serialization.Serializable
 
+@Serializable
 sealed class Route {
 
     @Serializable

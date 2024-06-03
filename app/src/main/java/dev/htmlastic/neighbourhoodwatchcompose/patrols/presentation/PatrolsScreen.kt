@@ -45,9 +45,7 @@ import kotlinx.datetime.Clock
 fun PatrolsScreen(navController: NavController, modifier: Modifier = Modifier) {
     val bottomSheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
-    var showBottomSheet by remember { mutableStateOf(true) }
-
-    // TODO: The BottomNavigation should be the same for almost all the pages
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {

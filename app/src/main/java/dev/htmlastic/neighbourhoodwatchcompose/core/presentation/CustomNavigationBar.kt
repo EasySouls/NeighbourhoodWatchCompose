@@ -22,13 +22,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavController
 import dev.htmlastic.neighbourhoodwatchcompose.Route
-import kotlin.reflect.KClass
+import kotlinx.serialization.Serializable
 
-data class BottomNavigationItem<T : Route>(
+
+data class BottomNavigationItem(
     val title: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
-    val route: KClass<T>,
+    @Serializable
+    val route: Route,
     val hasBadge: Boolean = false,
     val badgeCount: Int? = null
 )
@@ -38,19 +40,19 @@ val items = listOf(
         title = "Járőrök",
         selectedIcon = Icons.Filled.Home,
         unselectedIcon = Icons.Outlined.Home,
-        route = Route.PatrolsScreen::class
+        route = Route.PatrolsScreen
     ),
     BottomNavigationItem(
         title = "Tagok",
         selectedIcon = Icons.Filled.Person,
         unselectedIcon = Icons.Outlined.Person,
-        route = Route.MessagesScreen::class
+        route = Route.MessagesScreen
     ),
     BottomNavigationItem(
         title = "Naptár",
         selectedIcon = Icons.Filled.DateRange,
         unselectedIcon = Icons.Outlined.DateRange,
-        route = Route.CalendarScreen::class
+        route = Route.CalendarScreen
     )
 )
 
