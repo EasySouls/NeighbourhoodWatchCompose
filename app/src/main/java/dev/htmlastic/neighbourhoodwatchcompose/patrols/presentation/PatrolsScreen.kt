@@ -1,6 +1,9 @@
 package dev.htmlastic.neighbourhoodwatchcompose.patrols.presentation
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,14 +28,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import dev.htmlastic.neighbourhoodwatchcompose.core.data.CivilGuard
 import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.CustomNavigationBar
 import dev.htmlastic.neighbourhoodwatchcompose.patrols.data.Patrol
+import dev.htmlastic.neighbourhoodwatchcompose.patrols.data.PatrolService
 import dev.htmlastic.neighbourhoodwatchcompose.patrols.data.PatrolType
 import dev.htmlastic.neighbourhoodwatchcompose.patrols.presentation.widgets.ActivePatrol
 import dev.htmlastic.neighbourhoodwatchcompose.ui.theme.NeighbourhoodWatchComposeTheme
@@ -46,6 +53,8 @@ fun PatrolsScreen(navController: NavController, modifier: Modifier = Modifier) {
     val bottomSheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current.applicationContext
 
     Scaffold(
         topBar = {
@@ -108,7 +117,9 @@ fun PatrolsScreen(navController: NavController, modifier: Modifier = Modifier) {
                     },
                     sheetState = bottomSheetState
                 ) {
-                    Button(onClick = {
+                    Button(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        onClick = {
                             scope.launch { bottomSheetState.hide() }.invokeOnCompletion {
                                 if (!bottomSheetState.isVisible) {
                                     showBottomSheet = false
@@ -117,6 +128,17 @@ fun PatrolsScreen(navController: NavController, modifier: Modifier = Modifier) {
                         }
                     ) {
                         Text(text = "Elrejtés")
+                    }
+                    Button(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        onClick = {
+                        // TODO: Handle starting service in the ViewModel
+                        Intent(context, PatrolService::class.java).also {
+                            it.action = PatrolService.Actions.START.toString()
+                            context.startService(it)
+                        }
+                    }) {
+                        Text(text = "Járőrözés kezdése")
                     }
                 }
             }
