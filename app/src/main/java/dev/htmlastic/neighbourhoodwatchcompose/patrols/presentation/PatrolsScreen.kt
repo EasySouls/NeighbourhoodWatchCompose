@@ -1,9 +1,9 @@
 package dev.htmlastic.neighbourhoodwatchcompose.patrols.presentation
 
-import android.content.Context
 import android.content.Intent
+import android.os.Build
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +17,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -33,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import dev.htmlastic.neighbourhoodwatchcompose.core.data.CivilGuard
@@ -49,7 +47,11 @@ import kotlinx.datetime.Clock
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PatrolsScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun PatrolsScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    permissionResultLauncher: ManagedActivityResultLauncher<Array<String>, Map<String, @JvmSuppressWildcards Boolean>>?
+) {
     val bottomSheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -132,12 +134,19 @@ fun PatrolsScreen(navController: NavController, modifier: Modifier = Modifier) {
                     Button(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         onClick = {
-                        // TODO: Handle starting service in the ViewModel
-                        Intent(context, PatrolService::class.java).also {
-                            it.action = PatrolService.Actions.START.toString()
-                            context.startService(it)
-                        }
-                    }) {
+                            permissionResultLauncher?.launch(arrayOf(
+                                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                                    android.Manifest.permission.POST_NOTIFICATIONS
+                                else ""
+                            ))
+                            // TODO: Only start service if permissions are granted
+                            // TODO: Handle starting service in the ViewModel
+//                            Intent(context, PatrolService::class.java).also {
+//                                it.action = PatrolService.Actions.START.toString()
+//                                context.startService(it)
+//                            }
+                        }) {
                         Text(text = "Járőrözés kezdése")
                     }
                 }
@@ -151,6 +160,6 @@ fun PatrolsScreen(navController: NavController, modifier: Modifier = Modifier) {
 private fun HomeScreenPreview() {
     NeighbourhoodWatchComposeTheme {
         val navController = rememberNavController()
-        PatrolsScreen(navController)
+        PatrolsScreen(navController, permissionResultLauncher = null)
     }
 }
