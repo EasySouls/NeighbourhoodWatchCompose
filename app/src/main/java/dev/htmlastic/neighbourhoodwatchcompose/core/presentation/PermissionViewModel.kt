@@ -2,7 +2,7 @@ package dev.htmlastic.neighbourhoodwatchcompose.core.presentation
 
 import androidx.lifecycle.ViewModel
 
-class MainViewModel: ViewModel() {
+class PermissionViewModel: ViewModel() {
 
     val visiblePermissionDialogQueue = mutableListOf<String>()
 
@@ -14,7 +14,7 @@ class MainViewModel: ViewModel() {
         permission: String,
         isGranted: Boolean
     ) {
-        if (!isGranted) {
+        if (!isGranted && !visiblePermissionDialogQueue.contains(permission)) {
             visiblePermissionDialogQueue.add(permission)
         }
     }
