@@ -3,7 +3,6 @@ package dev.htmlastic.neighbourhoodwatchcompose.patrols.presentation
 import android.Manifest
 import android.app.Activity
 import android.os.Build
-import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -39,7 +38,7 @@ import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import dev.htmlastic.neighbourhoodwatchcompose.core.data.CivilGuard
+import dev.htmlastic.neighbourhoodwatchcompose.core.data.models.CivilGuard
 import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.CustomNavigationBar
 import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.LocationPermissionTextProvider
 import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.NotificationPermissionTextProvider

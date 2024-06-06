@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -6,6 +8,9 @@ plugins {
     id("kotlin-kapt")
     alias(libs.plugins.dagger.hilt)
 }
+
+val localProperties = Properties()
+localProperties.load(project.rootProject.file("local.properties").inputStream())
 
 android {
     namespace = "dev.htmlastic.neighbourhoodwatchcompose"
@@ -17,6 +22,9 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+
+        resValue("string", "google_client_id", localProperties.getProperty("google-web-client-id"))
+        resValue("string", "app_id", localProperties.getProperty("mongo-app-id"))
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -73,6 +81,9 @@ dependencies {
     implementation(libs.realm)
     implementation(libs.realm.sync)
     implementation(libs.androidx.work.runtime.ktx)
+
+    // Google OneTap SignIn
+    implementation(libs.onetapcompose)
 
     // Dagger-Hilt
     implementation(libs.hilt.android)

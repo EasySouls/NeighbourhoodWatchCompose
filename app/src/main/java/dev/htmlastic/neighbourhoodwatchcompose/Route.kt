@@ -16,4 +16,8 @@ sealed class Route {
 
     @Serializable
     data object CalendarScreen : Route()
+
+    @Serializable
+    data object AuthScreen : Route()
+
 }

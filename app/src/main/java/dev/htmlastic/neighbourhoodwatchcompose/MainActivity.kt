@@ -20,13 +20,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
+import dev.htmlastic.neighbourhoodwatchcompose.core.data.Constants.APP_ID
 import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.LocationPermissionTextProvider
 import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.PermissionViewModel
 import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.NotificationPermissionTextProvider
 import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.PermissionDialog
 import dev.htmlastic.neighbourhoodwatchcompose.patrols.presentation.PatrolsScreen
 import dev.htmlastic.neighbourhoodwatchcompose.ui.theme.NeighbourhoodWatchComposeTheme
+import io.realm.kotlin.mongodb.App
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,12 +43,21 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(
                     navController = navController,
-                    startDestination = Route.PatrolsScreen
+                    startDestination = getStartDestination()
                 ) {
                     composable<Route.PatrolsScreen> {
                         PatrolsScreen(
                             navController = navController,
                         )
+                    }
+
+                    composable<Route.AuthScreen> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text("Auth")
+                        }
                     }
 
                     composable<Route.MessagesScreen> {
@@ -68,6 +81,12 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
+
+fun getStartDestination(): Route {
+    val user = App.create(APP_ID).currentUser
+    return if (user != null && user.loggedIn) Route.AuthScreen
+    else Route.PatrolsScreen
 }
 
 fun Activity.openAppSettings() {

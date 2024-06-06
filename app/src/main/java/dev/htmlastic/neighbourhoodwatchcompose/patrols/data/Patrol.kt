@@ -1,6 +1,6 @@
 package dev.htmlastic.neighbourhoodwatchcompose.patrols.data
 
-import dev.htmlastic.neighbourhoodwatchcompose.core.data.CivilGuard
+import dev.htmlastic.neighbourhoodwatchcompose.core.data.models.CivilGuard
 import io.realm.kotlin.types.RealmInstant
 import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.annotations.PrimaryKey

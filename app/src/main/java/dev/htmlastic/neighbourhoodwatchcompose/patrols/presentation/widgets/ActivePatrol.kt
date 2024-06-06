@@ -3,7 +3,6 @@ package dev.htmlastic.neighbourhoodwatchcompose.patrols.presentation.widgets
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,14 +15,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.htmlastic.neighbourhoodwatchcompose.core.data.CivilGuard
+import dev.htmlastic.neighbourhoodwatchcompose.core.data.models.CivilGuard
 import dev.htmlastic.neighbourhoodwatchcompose.core.domain.DateTimeUtils
 import dev.htmlastic.neighbourhoodwatchcompose.patrols.data.Patrol
 import dev.htmlastic.neighbourhoodwatchcompose.patrols.data.PatrolType
 import dev.htmlastic.neighbourhoodwatchcompose.ui.theme.NeighbourhoodWatchComposeTheme
 import io.realm.kotlin.types.RealmInstant
 import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDateTime
 
 @Composable
 fun ActivePatrol(
