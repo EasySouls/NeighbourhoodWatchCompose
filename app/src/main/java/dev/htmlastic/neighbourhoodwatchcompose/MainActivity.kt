@@ -43,7 +43,8 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(
                     navController = navController,
-                    startDestination = getStartDestination()
+                    startDestination = Route.PatrolsScreen,
+//                    startDestination = getStartDestination()
                 ) {
                     composable<Route.PatrolsScreen> {
                         PatrolsScreen(
@@ -85,8 +86,8 @@ class MainActivity : ComponentActivity() {
 
 fun getStartDestination(): Route {
     val user = App.create(APP_ID).currentUser
-    return if (user != null && user.loggedIn) Route.AuthScreen
-    else Route.PatrolsScreen
+    return if (user != null && user.loggedIn) Route.PatrolsScreen
+    else Route.AuthScreen
 }
 
 fun Activity.openAppSettings() {

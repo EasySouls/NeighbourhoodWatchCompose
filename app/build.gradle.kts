@@ -82,9 +82,6 @@ dependencies {
     implementation(libs.realm.sync)
     implementation(libs.androidx.work.runtime.ktx)
 
-    // Google OneTap SignIn
-    implementation(libs.onetapcompose)
-
     // Dagger-Hilt
     implementation(libs.hilt.android)
     kapt(libs.dagger.compiler)

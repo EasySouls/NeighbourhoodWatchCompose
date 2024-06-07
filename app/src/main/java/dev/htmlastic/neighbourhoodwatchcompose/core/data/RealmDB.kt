@@ -3,6 +3,7 @@ package dev.htmlastic.neighbourhoodwatchcompose.core.data
 import android.util.Log
 import dev.htmlastic.neighbourhoodwatchcompose.core.data.Constants.APP_ID
 import dev.htmlastic.neighbourhoodwatchcompose.core.data.models.CivilGuard
+import dev.htmlastic.neighbourhoodwatchcompose.core.data.models.Department
 import dev.htmlastic.neighbourhoodwatchcompose.patrols.data.Patrol
 import io.realm.kotlin.Configuration
 import io.realm.kotlin.Realm
@@ -50,17 +51,40 @@ object RealmDB: CivilGuardRealmRepository {
         return realm.query<CivilGuard>().asFlow().map { it.list }
     }
 
+    override fun getCivilGuardById(id: ObjectId): Flow<CivilGuard?> {
+        return realm.query<CivilGuard>(query = "_id == $0", id)
+            .asFlow().map { it.list.firstOrNull() }
+    }
+
+    override fun getCivilGuardsByDepartment(department: Department): Flow<List<CivilGuard>> {
+        return realm.query<CivilGuard>(query = "department == $0", department)
+            .asFlow().map { it.list }
+    }
+
     override fun filterCivilGuards(query: String): Flow<List<CivilGuard>> {
         return realm.query<CivilGuard>(query = "name CONTAINS[c] $0", query)
             .asFlow().map { it.list }
     }
 
 
-    override suspend fun insertCivilGuard(civilGuard: CivilGuard) {
+    override suspend fun insertCivilGuard(civilGuard: CivilGuard, department: Department) {
         if (user != null) {
             realm.write {
                 try {
-                    copyToRealm(civilGuard.apply { owner_id = user.id })
+                    val queriedDepartment = query<Department>(query = "_id == $0", department._id)
+                        .first()
+                        .find()
+
+                    if (queriedDepartment == null) {
+                        Log.d("RealmDB", "insertCivilGuard: Queried Department doesn't exist: $department")
+                        return@write
+                    }
+
+                    // TODO: Check if this adds the Civil Guard to the Department as well
+                    copyToRealm(civilGuard.apply {
+                        owner_id = user.id
+                        this.department = department
+                    } )
                 } catch (e: Exception) {
                     Log.d("RealmDB", "insertCivilGuard: ${e.message}")
                 }

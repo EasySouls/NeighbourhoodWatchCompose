@@ -49,6 +49,7 @@ import dev.htmlastic.neighbourhoodwatchcompose.patrols.data.Patrol
 import dev.htmlastic.neighbourhoodwatchcompose.patrols.data.PatrolType
 import dev.htmlastic.neighbourhoodwatchcompose.patrols.presentation.widgets.ActivePatrol
 import dev.htmlastic.neighbourhoodwatchcompose.ui.theme.NeighbourhoodWatchComposeTheme
+import io.realm.kotlin.ext.realmListOf
 import io.realm.kotlin.types.RealmInstant
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
@@ -138,7 +139,7 @@ fun PatrolsScreen(
                 startedAt = RealmInstant.from(Clock.System.now().toEpochMilliseconds(), 1)
                 patrolType = PatrolType.STARTED
                 patrolCarLicensePlate = "142IEW"
-                participants = listOf(
+                participants = realmListOf(
                     CivilGuard().apply {
                         name = "Kis Pista"
                         phoneNumber = "06301736282"
