@@ -1,4 +1,4 @@
-package dev.htmlastic.neighbourhoodwatchcompose.patrols.presentation.widgets
+package dev.htmlastic.neighbourhoodwatchcompose.patrols.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

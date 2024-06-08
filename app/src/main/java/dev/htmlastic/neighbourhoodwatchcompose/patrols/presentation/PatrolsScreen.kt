@@ -2,6 +2,7 @@ package dev.htmlastic.neighbourhoodwatchcompose.patrols.presentation
 
 import android.Manifest
 import android.app.Activity
+import android.content.Intent
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -44,10 +45,13 @@ import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.LocationPermiss
 import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.NotificationPermissionTextProvider
 import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.PermissionDialog
 import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.PermissionViewModel
+import dev.htmlastic.neighbourhoodwatchcompose.events.presentation.components.OncomingEvents
 import dev.htmlastic.neighbourhoodwatchcompose.openAppSettings
 import dev.htmlastic.neighbourhoodwatchcompose.patrols.data.Patrol
+import dev.htmlastic.neighbourhoodwatchcompose.patrols.data.PatrolService
 import dev.htmlastic.neighbourhoodwatchcompose.patrols.data.PatrolType
-import dev.htmlastic.neighbourhoodwatchcompose.patrols.presentation.widgets.ActivePatrol
+import dev.htmlastic.neighbourhoodwatchcompose.patrols.presentation.components.ActivePatrol
+import dev.htmlastic.neighbourhoodwatchcompose.patrols.presentation.components.OngoingPatrols
 import dev.htmlastic.neighbourhoodwatchcompose.ui.theme.NeighbourhoodWatchComposeTheme
 import io.realm.kotlin.ext.realmListOf
 import io.realm.kotlin.types.RealmInstant
@@ -58,6 +62,8 @@ import kotlinx.datetime.Clock
 @Composable
 fun PatrolsScreen(
     navController: NavController,
+    currentPatrol: Patrol?,
+    ongoingPatrols: List<Patrol>,
     modifier: Modifier = Modifier,
 ) {
     val bottomSheetState = rememberModalBottomSheetState()
@@ -130,29 +136,37 @@ fun PatrolsScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
         ) {
-            // If (activePatrol) {
-            //     ActivePatrolScreen()
-            // } else {
-            //     OncomingEventsScreen()
-            // }
-            val patrol = Patrol().apply {
-                startedAt = RealmInstant.from(Clock.System.now().toEpochMilliseconds(), 1)
-                patrolType = PatrolType.STARTED
-                patrolCarLicensePlate = "142IEW"
-                participants = realmListOf(
-                    CivilGuard().apply {
-                        name = "Kis Pista"
-                        phoneNumber = "06301736282"
-                    },
-                    CivilGuard().apply {
-                        name = "Nagy József"
-                        phoneNumber = "06302856296"
-                    }
-                )
-            }
             Box(modifier = Modifier.padding(16.dp)) {
-                ActivePatrol(
-                    patrol = patrol,
+                if (currentPatrol != null) {
+                    ActivePatrol(
+                        patrol = currentPatrol,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                } else {
+                    OncomingEvents()
+                }
+
+            }
+//            val patrol = Patrol().apply {
+//                startedAt = RealmInstant.from(Clock.System.now().toEpochMilliseconds(), 1)
+//                patrolType = PatrolType.STARTED
+//                patrolCarLicensePlate = "142IEW"
+//                participants = realmListOf(
+//                    CivilGuard().apply {
+//                        name = "Kis Pista"
+//                        phoneNumber = "06301736282"
+//                    },
+//                    CivilGuard().apply {
+//                        name = "Nagy József"
+//                        phoneNumber = "06302856296"
+//                    }
+//                )
+//            }
+
+
+            Box(modifier = Modifier.padding(16.dp)) {
+                OngoingPatrols(
+                    ongoingPatrols = ongoingPatrols,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -179,18 +193,20 @@ fun PatrolsScreen(
                     Button(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         onClick = {
-                            permissionsResultLauncher.launch(arrayOf(
-                                Manifest.permission.ACCESS_COARSE_LOCATION,
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                                    Manifest.permission.POST_NOTIFICATIONS
-                                else ""
-                            ))
+                            permissionsResultLauncher.launch(
+                                arrayOf(
+                                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                                        Manifest.permission.POST_NOTIFICATIONS
+                                    else ""
+                                )
+                            )
                             // TODO: Only start service if permissions are granted
                             // TODO: Handle starting service in the ViewModel
-//                            Intent(context, PatrolService::class.java).also {
-//                                it.action = PatrolService.Actions.START.toString()
-//                                context.startService(it)
-//                            }
+                            Intent(context, PatrolService::class.java).also {
+                                it.action = PatrolService.Actions.START.toString()
+                                context.startService(it)
+                            }
                         }) {
                         Text(text = "Járőrözés kezdése")
                     }
@@ -205,6 +221,20 @@ fun PatrolsScreen(
 private fun HomeScreenPreview() {
     NeighbourhoodWatchComposeTheme {
         val navController = rememberNavController()
-        PatrolsScreen(navController)
+        PatrolsScreen(
+            navController,
+            currentPatrol = Patrol().apply {
+                startedAt = RealmInstant.from(Clock.System.now().toEpochMilliseconds(), 1)
+                patrolType = PatrolType.STARTED
+                patrolCarLicensePlate = "142IEW"
+                participants = realmListOf(
+                    CivilGuard().apply {
+                        name = "Kis Pista"
+                        phoneNumber = "06301736282"
+                    },
+                )
+            },
+            ongoingPatrols = emptyList()
+        )
     }
 }

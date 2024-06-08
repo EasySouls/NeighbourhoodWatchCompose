@@ -1,32 +1,29 @@
 package dev.htmlastic.neighbourhoodwatchcompose
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import dev.htmlastic.neighbourhoodwatchcompose.authentication.AuthenticationScreen
 import dev.htmlastic.neighbourhoodwatchcompose.core.data.Constants.APP_ID
-import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.LocationPermissionTextProvider
-import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.PermissionViewModel
-import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.NotificationPermissionTextProvider
-import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.PermissionDialog
+import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.AuthenticationViewModel
 import dev.htmlastic.neighbourhoodwatchcompose.patrols.presentation.PatrolsScreen
+import dev.htmlastic.neighbourhoodwatchcompose.patrols.presentation.PatrolsViewModel
 import dev.htmlastic.neighbourhoodwatchcompose.ui.theme.NeighbourhoodWatchComposeTheme
 import io.realm.kotlin.mongodb.App
 
@@ -47,18 +44,22 @@ class MainActivity : ComponentActivity() {
 //                    startDestination = getStartDestination()
                 ) {
                     composable<Route.PatrolsScreen> {
+                        val viewModel: PatrolsViewModel = hiltViewModel()
+                        val currentPatrol = viewModel.currentPatrol.collectAsStateWithLifecycle()
+                        val ongoingPatrols = viewModel.ongoingPatrols.collectAsStateWithLifecycle()
+
                         PatrolsScreen(
+                            currentPatrol = currentPatrol.value,
+                            ongoingPatrols = ongoingPatrols.value,
                             navController = navController,
                         )
                     }
 
                     composable<Route.AuthScreen> {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text("Auth")
-                        }
+                        val viewModel: AuthenticationViewModel = hiltViewModel()
+                        val authenticated = viewModel.authenticated
+                        
+                        AuthenticationScreen(authenticated = authenticated.value)
                     }
 
                     composable<Route.MessagesScreen> {

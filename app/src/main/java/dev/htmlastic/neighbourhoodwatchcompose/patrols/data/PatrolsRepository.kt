@@ -11,7 +11,7 @@ interface PatrolsRepository {
      * @param userId The id of the user
      * @return The current patrol or null
      */
-    fun getOngoingParticipatedPatrol(userId: ObjectId): Patrol?
+    fun getOngoingParticipatedPatrol(userId: ObjectId): Flow<Patrol?>
 
     /**
      *  Get all ongoing patrols by department
