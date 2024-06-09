@@ -8,14 +8,15 @@ import io.realm.kotlin.ext.query
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.mongodb.kbson.ObjectId
+import javax.inject.Inject
 
 /**
  * An implementation of [PatrolsRepository] using Realm.
  *
  * @param realm The Realm instance to use.
  */
-class RealmPatrolsRepository(
-    private var realm: Realm
+class RealmPatrolsRepository @Inject constructor(
+    var realm: Realm
 ): PatrolsRepository {
     override fun getOngoingParticipatedPatrol(userId: ObjectId): Flow<Patrol?> {
         // TODO: Return only the ongoing patrol and search in the participants

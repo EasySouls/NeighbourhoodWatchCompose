@@ -9,9 +9,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.mongodb.kbson.ObjectId
+import javax.inject.Inject
 
 @HiltViewModel
-class PatrolsViewModel(
+class PatrolsViewModel @Inject constructor(
     private val repository: PatrolsRepository
 ): ViewModel() {
 
