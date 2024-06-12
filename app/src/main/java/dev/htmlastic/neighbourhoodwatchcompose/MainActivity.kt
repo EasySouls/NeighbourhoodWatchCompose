@@ -21,7 +21,7 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.htmlastic.neighbourhoodwatchcompose.authentication.AuthenticationScreen
 import dev.htmlastic.neighbourhoodwatchcompose.core.data.Constants.APP_ID
-import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.AuthenticationViewModel
+import dev.htmlastic.neighbourhoodwatchcompose.authentication.AuthenticationViewModel
 import dev.htmlastic.neighbourhoodwatchcompose.patrols.presentation.PatrolsScreen
 import dev.htmlastic.neighbourhoodwatchcompose.patrols.presentation.PatrolsViewModel
 import dev.htmlastic.neighbourhoodwatchcompose.ui.theme.NeighbourhoodWatchComposeTheme
@@ -47,10 +47,12 @@ class MainActivity : ComponentActivity() {
                         val viewModel: PatrolsViewModel = hiltViewModel()
                         val currentPatrol = viewModel.currentPatrol.collectAsStateWithLifecycle()
                         val ongoingPatrols = viewModel.ongoingPatrols.collectAsStateWithLifecycle()
+                        val upcomingEvents = viewModel.upcomingEvents.collectAsStateWithLifecycle()
 
                         PatrolsScreen(
                             currentPatrol = currentPatrol.value,
                             ongoingPatrols = ongoingPatrols.value,
+                            upcomingEvents = upcomingEvents.value,
                             navController = navController,
                         )
                     }

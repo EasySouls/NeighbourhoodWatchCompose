@@ -1,17 +1,18 @@
 package dev.htmlastic.neighbourhoodwatchcompose.patrols.data
 
+import dev.htmlastic.neighbourhoodwatchcompose.core.data.models.CivilGuard
 import dev.htmlastic.neighbourhoodwatchcompose.core.data.models.Department
 import kotlinx.coroutines.flow.Flow
 import org.mongodb.kbson.ObjectId
 
 interface PatrolsRepository {
     /**
-     *  Gets the current ongoing patrol of the user, if any
+     *  Gets the current ongoing patrol of a civil guard, if any
      *
-     * @param userId The id of the user
+     * @param civilGuard The civil guard
      * @return The current patrol or null
      */
-    fun getOngoingParticipatedPatrol(userId: ObjectId): Flow<Patrol?>
+    fun getOngoingParticipatedPatrol(civilGuard: CivilGuard): Flow<Patrol?>
 
     /**
      *  Get all ongoing patrols by department

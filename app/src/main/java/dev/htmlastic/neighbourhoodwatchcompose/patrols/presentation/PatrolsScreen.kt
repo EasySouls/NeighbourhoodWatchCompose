@@ -23,6 +23,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,16 +41,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import dev.htmlastic.neighbourhoodwatchcompose.core.data.models.CivilGuard
+import dev.htmlastic.neighbourhoodwatchcompose.core.data.models.Event
 import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.CustomNavigationBar
 import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.LocationPermissionTextProvider
 import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.NotificationPermissionTextProvider
 import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.PermissionDialog
 import dev.htmlastic.neighbourhoodwatchcompose.core.presentation.PermissionViewModel
-import dev.htmlastic.neighbourhoodwatchcompose.events.presentation.components.OncomingEvents
+import dev.htmlastic.neighbourhoodwatchcompose.events.presentation.components.UpcomingEvents
 import dev.htmlastic.neighbourhoodwatchcompose.openAppSettings
 import dev.htmlastic.neighbourhoodwatchcompose.patrols.data.Patrol
 import dev.htmlastic.neighbourhoodwatchcompose.patrols.data.PatrolService
-import dev.htmlastic.neighbourhoodwatchcompose.patrols.data.PatrolType
+import dev.htmlastic.neighbourhoodwatchcompose.patrols.data.PatrolState
 import dev.htmlastic.neighbourhoodwatchcompose.patrols.presentation.components.ActivePatrol
 import dev.htmlastic.neighbourhoodwatchcompose.patrols.presentation.components.OngoingPatrols
 import dev.htmlastic.neighbourhoodwatchcompose.ui.theme.NeighbourhoodWatchComposeTheme
@@ -64,6 +66,7 @@ fun PatrolsScreen(
     navController: NavController,
     currentPatrol: Patrol?,
     ongoingPatrols: List<Patrol>,
+    upcomingEvents: List<Event>,
     modifier: Modifier = Modifier,
 ) {
     val bottomSheetState = rememberModalBottomSheetState()
@@ -115,7 +118,7 @@ fun PatrolsScreen(
                 title = {
                     Text("Patrols")
                 },
-                modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+                colors = TopAppBarDefaults.topAppBarColors(),
             )
         },
         bottomBar = {
@@ -136,33 +139,21 @@ fun PatrolsScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
         ) {
-            Box(modifier = Modifier.padding(16.dp)) {
-                if (currentPatrol != null) {
-                    ActivePatrol(
-                        patrol = currentPatrol,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                } else {
-                    OncomingEvents()
-                }
-
+            if (currentPatrol != null) {
+                ActivePatrol(
+                    patrol = currentPatrol,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                )
             }
-//            val patrol = Patrol().apply {
-//                startedAt = RealmInstant.from(Clock.System.now().toEpochMilliseconds(), 1)
-//                patrolType = PatrolType.STARTED
-//                patrolCarLicensePlate = "142IEW"
-//                participants = realmListOf(
-//                    CivilGuard().apply {
-//                        name = "Kis Pista"
-//                        phoneNumber = "06301736282"
-//                    },
-//                    CivilGuard().apply {
-//                        name = "Nagy József"
-//                        phoneNumber = "06302856296"
-//                    }
-//                )
-//            }
 
+            UpcomingEvents(
+                events = upcomingEvents,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
 
             Box(modifier = Modifier.padding(16.dp)) {
                 OngoingPatrols(
@@ -225,7 +216,7 @@ private fun HomeScreenPreview() {
             navController,
             currentPatrol = Patrol().apply {
                 startedAt = RealmInstant.from(Clock.System.now().toEpochMilliseconds(), 1)
-                patrolType = PatrolType.STARTED
+                patrolState = PatrolState()
                 patrolCarLicensePlate = "142IEW"
                 participants = realmListOf(
                     CivilGuard().apply {
@@ -234,7 +225,8 @@ private fun HomeScreenPreview() {
                     },
                 )
             },
-            ongoingPatrols = emptyList()
+            ongoingPatrols = emptyList(),
+            upcomingEvents = emptyList()
         )
     }
 }

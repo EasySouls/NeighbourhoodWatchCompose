@@ -35,7 +35,7 @@ data class BottomNavigationItem(
     val badgeCount: Int? = null
 )
 
-val items = listOf(
+private val items = listOf(
     BottomNavigationItem(
         title = "Járőrök",
         selectedIcon = Icons.Filled.Home,

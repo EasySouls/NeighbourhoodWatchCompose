@@ -1,6 +1,7 @@
 package dev.htmlastic.neighbourhoodwatchcompose.patrols.data
 
 import dev.htmlastic.neighbourhoodwatchcompose.core.data.models.CivilGuard
+import dev.htmlastic.neighbourhoodwatchcompose.core.data.models.Department
 import io.realm.kotlin.ext.realmListOf
 import io.realm.kotlin.types.RealmInstant
 import io.realm.kotlin.types.RealmList
@@ -15,5 +16,6 @@ class Patrol : RealmObject {
     var endedAt: RealmInstant? = null
     var participants: RealmList<CivilGuard> = realmListOf()
     var patrolCarLicensePlate: String = ""
-    var patrolType: PatrolType = PatrolType.STARTED
+    var patrolState: PatrolState? = null
+    var department: Department? = null
 }

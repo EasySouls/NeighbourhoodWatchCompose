@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import dev.htmlastic.neighbourhoodwatchcompose.core.data.models.CivilGuard
 import dev.htmlastic.neighbourhoodwatchcompose.core.domain.DateTimeUtils
 import dev.htmlastic.neighbourhoodwatchcompose.patrols.data.Patrol
-import dev.htmlastic.neighbourhoodwatchcompose.patrols.data.PatrolType
+import dev.htmlastic.neighbourhoodwatchcompose.patrols.data.PatrolState
 import dev.htmlastic.neighbourhoodwatchcompose.ui.theme.NeighbourhoodWatchComposeTheme
 import io.realm.kotlin.ext.realmListOf
 import io.realm.kotlin.types.RealmInstant
@@ -40,7 +40,8 @@ fun ActivePatrol(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.primaryContainer)
-                .padding(6.dp),
+                .padding(6.dp)
+            ,
             horizontalArrangement = Arrangement.SpaceAround
         ) {
             Text(
@@ -57,7 +58,7 @@ fun ActivePatrol(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.surface)
+                        .background(MaterialTheme.colorScheme.surfaceContainer)
                         .padding(8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -71,6 +72,8 @@ fun ActivePatrol(
                 HorizontalDivider()
             }
         }
+
+    // TODO: Add Button to end patrol and the running PatrolService
 }
 
 @Preview
@@ -79,7 +82,7 @@ private fun ActivePatrolPreview() {
     NeighbourhoodWatchComposeTheme {
         val patrol = Patrol().apply {
             startedAt = RealmInstant.from(Clock.System.now().toEpochMilliseconds(), 1)
-            patrolType = PatrolType.STARTED
+            patrolState = PatrolState()
             patrolCarLicensePlate = "142IEW"
             participants = realmListOf(
                 CivilGuard().apply {

@@ -1,4 +1,4 @@
-package dev.htmlastic.neighbourhoodwatchcompose.core.presentation
+package dev.htmlastic.neighbourhoodwatchcompose.authentication
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

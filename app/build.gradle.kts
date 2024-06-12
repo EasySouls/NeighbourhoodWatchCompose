@@ -7,6 +7,7 @@ plugins {
 //    alias(libs.plugins.ksp)
     id("kotlin-kapt")
     alias(libs.plugins.dagger.hilt)
+    alias(libs.plugins.realm)
 }
 
 val localProperties = Properties()
